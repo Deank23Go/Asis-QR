@@ -1,13 +1,15 @@
 import axios from 'axios';
 
-// Aquí configuramos la URL base (el backend de Node.js)
+// Configuración de Axios
 const instance = axios.create({
-  baseURL: import.meta.env.VITE_BACKEND_URL,  // URL de tu backend (ajústala si usas otro puerto o dominio)
-  timeout: 10000,  // Configura un tiempo de espera de 5 segundos
+  baseURL: import.meta.env.VITE_BACKEND_URL,  // URL del backend desde el archivo .env
+  timeout: 10000,  // Tiempo de espera de 10 segundos
   headers: {
-    'Content-Type': 'application/json', // Establece el tipo de contenido para solicitudes JSON
+    'Content-Type': 'application/json',  // Establece el tipo de contenido para solicitudes JSON
   },
   withCredentials: true,  // Permitir el envío de cookies con la solicitud
 });
+
+console.log('Backend URL:', import.meta.env.VITE_BACKEND_URL); // Verifica que la URL esté cargada correctamente
 
 export default instance;
