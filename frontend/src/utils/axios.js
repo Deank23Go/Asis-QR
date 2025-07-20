@@ -1,5 +1,5 @@
 import axios from 'axios';
-;
+
 // Aquí configuramos la URL base (el backend de Node.js)
 const instance = axios.create({
   baseURL: import.meta.env.VITE_AXIOS,  // URL de tu backend (ajústala si usas otro puerto o dominio)
