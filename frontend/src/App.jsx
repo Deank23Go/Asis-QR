@@ -8,6 +8,7 @@ import Registerform from './pages/RegisterForm'
 import ResetPassword from './components/ResetPassword';
 import AttendanceForm from "./pages/AttendanceForm"; 
 import QRCodeGenerator from './components/QRCodeGenerator';
+import logo from './assets/logo.png'; // Asegúrate de que la ruta al logo sea correcta
 
 export default function App() {
   return (
@@ -23,6 +24,10 @@ export default function App() {
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/register-attendance" element={<QRCodeGenerator />} />  
       </Routes>
+      <div>
+      <img src={logo} alt="Logo" />
+    </div>
     </Router>
+    
   );
 }
