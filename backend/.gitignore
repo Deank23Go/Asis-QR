@@ -3,8 +3,7 @@ node_modules/
 
 # Ignorar archivos de log
 *.log
-
-# Ignorar archivos de entorno
+# Ignorar el archivo .env
 .env
 
 # Ignorar archivos de sistema de Mac

@@ -6,16 +6,18 @@ const crypto = require('crypto');
 const multer = require('multer');
 const path = require('path');
 const session = require('express-session');  // Importar express-session
+const { URL } = require('./ConfigDB');
 
 const app = express();
 
-// Configuración CORS
-app.use(cors({
-  origin: 'http://localhost:5173',  // Asegúrate de que sea la URL correcta de tu frontend
+// Configuración de CORS
+const corsOptions = {
+  origin: URL,  // Usar la URL definida en .env o 'http://localhost:5173'
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
-   credentials: true,  // Permitir el uso de cookies y otros datos de sesión
-}));
+  credentials: true,  // Permitir el uso de cookies y otros datos de sesión
+};
+app.use(cors(corsOptions));  // Usar las opciones de CORS definidas
 
 app.use(express.json());  // Middleware para parsear solicitudes JSON
 
@@ -164,12 +166,11 @@ app.post('/api/logout', (req, res) => {
 
 
 
-// Configuración del puerto
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Servidor corriendo en el puerto ${PORT}`);
+// Configurar el puerto de la aplicación
+const port = process.env.PORT || 3000;  // Usa el puerto del entorno o 3000 por defecto
+app.listen(port, () => {
+  console.log(`Servidor corriendo en el puerto ${port}`);
 });
-
 
 // Ruta para registrar un curso
 app.post('/api/register-course', async (req, res) => {
