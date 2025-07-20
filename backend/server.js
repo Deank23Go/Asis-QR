@@ -12,7 +12,7 @@ const app = express();
 
 // Configuración de CORS
 const corsOptions = {
-  origin: FRONTEND_URL,  // Usar la URL definida en .env o 'http://localhost:5173'
+  origin: process.env.FRONTEND_URL || FRONTEND_URL,  // Usar la URL definida en .env o 'http://localhost:5173'
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,  // Permitir el uso de cookies y otros datos de sesión
@@ -20,7 +20,7 @@ const corsOptions = {
 app.use(cors(corsOptions));  // Usar las opciones de CORS definidas
 
 app.use(express.json());  // Middleware para parsear solicitudes JSON
-
+console.log('Frontend URL:', process.env.FRONTEND_URL);
 // Configuración de express-session para manejar sesiones
 app.use(
   session({
