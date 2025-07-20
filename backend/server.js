@@ -6,13 +6,13 @@ const crypto = require('crypto');
 const multer = require('multer');
 const path = require('path');
 const session = require('express-session');  // Importar express-session
-const { URL } = require('./ConfigDB');
+const { FRONTEND_URL, DB_HOST, DB_NAME, DB_PASSWORD, DB_PORT, DB_USER, PORT } = require('./ConfigDB');
 
 const app = express();
 
 // Configuración de CORS
 const corsOptions = {
-  origin: URL,  // Usar la URL definida en .env o 'http://localhost:5173'
+  origin: FRONTEND_URL,  // Usar la URL definida en .env o 'http://localhost:5173'
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,  // Permitir el uso de cookies y otros datos de sesión
@@ -36,11 +36,11 @@ app.use(
 
 // Conexión a la base de datos PostgreSQL
 const pool = new Pool({
-  user: 'postgres',
-  host: 'localhost',
-  database: 'Asis_QR',
-  password: 'admin',
-  port: 5432,
+  user: DB_USER,
+  host: DB_HOST,
+  database: DB_NAME,
+  password: DB_PASSWORD,
+  port: DB_PORT,
 });
 
 // Configuración de Multer para manejar la subida de imágenes
@@ -167,9 +167,9 @@ app.post('/api/logout', (req, res) => {
 
 
 // Configurar el puerto de la aplicación
-const port = process.env.PORT || 3000;  // Usa el puerto del entorno o 3000 por defecto
-app.listen(port, () => {
-  console.log(`Servidor corriendo en el puerto ${port}`);
+
+app.listen(PORT, () => {
+  console.log(`Servidor corriendo en el puerto ${PORT}`);
 });
 
 // Ruta para registrar un curso
