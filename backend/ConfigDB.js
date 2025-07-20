@@ -1,4 +1,4 @@
-export const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:5173';  // URL del backend, por defecto localhost:5173
+export const FRONTEND_URL = process.env.FRONTEND_URL || 'https://asis-qr.onrender.com/';  // URL del backend, por defecto localhost:5173
 
 
 export const DB_USER = process.env.DB_USER || 'postgres';
