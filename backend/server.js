@@ -10,14 +10,32 @@ const { FRONTEND_URL, DB_HOST, DB_NAME, DB_PASSWORD, DB_PORT, DB_USER, PORT } = 
 
 const app = express();
 
-// Configuración de CORS
+// 1. Configuración CORS (como ya la tienes)
 const corsOptions = {
-  origin: [process.env.FRONTEND_URL, 'http://localhost:5173'],  // Permite solicitudes desde ambos orígenes (local y producción)
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  origin: [
+    process.env.FRONTEND_URL, 
+    'http://localhost:5173',
+    'https://asis-gp-1.onrender.com'
+  ],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true,  // Permitir el uso de cookies y otros datos de sesión
+  credentials: true
 };
-app.use(cors(corsOptions));  // Usar las opciones de CORS definidas
+
+// Configuración CORS normal
+app.use(cors(corsOptions));
+
+// Middleware para manejar OPTIONS
+app.use((req, res, next) => {
+  if (req.method === 'OPTIONS') {
+    res.header('Access-Control-Allow-Origin', req.headers.origin || '*');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    res.header('Access-Control-Allow-Credentials', 'true');
+    return res.status(200).json({});
+  }
+  next();
+});
 
 app.use(express.json());  // Middleware para parsear solicitudes JSON
 console.log('Frontend URL:', process.env.FRONTEND_URL);
