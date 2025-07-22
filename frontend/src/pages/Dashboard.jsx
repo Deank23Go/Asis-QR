@@ -23,7 +23,7 @@ const DashboardStudent = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await axios.get("api/user");
+        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/user`);
         const imagePath = response.data.imagen
           ? `http://localhost:3000/${response.data.imagen}`
           : "http://localhost:3000/uploads/user.png";

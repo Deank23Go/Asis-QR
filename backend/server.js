@@ -65,7 +65,9 @@ app.get("/test-db", async (req, res) => {
 });
 
 app.use(express.json()); // Middleware para parsear solicitudes JSON
+
 console.log("Frontend URL:", process.env.FRONTEND_URL);
+
 // Configuración de express-session para manejar sesiones
 app.use(
   session({
