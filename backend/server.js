@@ -21,14 +21,24 @@ const app = express();
 
 
 // Configuración dinámica CORS
-app.use(cors({
-  origin: process.env.NODE_ENV === "production" 
-    ? 'https://asis-qr-1.onrender.com' 
-    : 'http://localhost:5173',
+const corsOptions = {
+  origin: (origin, callback) => {
+    const allowedOrigins = [
+      'https://asis-qr-1.onrender.com', // Producción
+      'http://localhost:5173' // Desarrollo
+    ];
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Origen no permitido por CORS'));
+    }
+  },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization']
-}));
+};
+
+app.use(cors(corsOptions));
 
 // Middleware para manejar OPTIONS
 app.use((req, res, next) => {
@@ -62,17 +72,15 @@ app.use(
     secret: process.env.SESSION_SECRET || "mi_clave_secreta_backup",
     resave: false,
     saveUninitialized: false,
-    proxy: true, // Necesario cuando hay proxy inverso (como en Render)
     cookie: {
-      secure: true, // Obligatorio para SameSite=None
+      domain: '.render.com', // Punto inicial importante
+      secure: process.env.NODE_ENV === "production",
       httpOnly: true,
-      sameSite: process.env.NODE_ENV === "production" ? 'none' : 'lax',
-      maxAge: 24 * 60 * 60 * 1000,
-      domain: process.env.NODE_ENV === "production" ? '.render.com' : undefined // Dominio compartido
-    }
+      sameSite: "lax",
+      maxAge: 24 * 60 * 60 * 1000, // 24 horas
+    },
   })
 );
-
 
 // Configuración del Pool (como ya la tienes)
 const poolConfig = DATABASE_URL
