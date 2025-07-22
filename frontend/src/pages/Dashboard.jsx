@@ -23,10 +23,18 @@ const DashboardStudent = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/user`);
+        const token = localStorage.getItem('token');
+        const response = await axios.get(
+          `${import.meta.env.VITE_BACKEND_URL}/api/user`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          }
+        );
         const imagePath = response.data.imagen
-          ? `http://localhost:3000/${response.data.imagen}`
-          : "http://localhost:3000/uploads/user.png";
+          ? `${import.meta.env.VITE_BACKEND_URL}/${response.data.imagen}`
+          : `${import.meta.env.VITE_BACKEND_URL}/uploads/user.png`;
 
         // Asignamos los valores de los datos obtenidos del backend
         setStudentName(response.data.nombre || "Estudiante");
@@ -144,7 +152,7 @@ const DashboardStudent = () => {
           email={email}
           phone={phone}
           role={role}
-          nivel={nivel} 
+          nivel={nivel}
           facultad={facultad}
           carrera={carrera}
           closeModal={closeModal}
