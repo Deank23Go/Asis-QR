@@ -13,6 +13,7 @@ const LoginForm = () => {
 
     try {
       const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/login`, { email, password });
+      console.log("URL del Backend:", import.meta.env.VITE_BACKEND_URL);
 
       // Verificar que la respuesta contenga la información del usuario
       if (response.data.user) {
