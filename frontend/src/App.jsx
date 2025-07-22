@@ -5,10 +5,7 @@ import Dashboard from './pages/Dashboard';  // Asegúrate de importar el Dashboa
 import Login from './pages/Login';
 import DashboardTeacher from './pages/DashboardTeacher';
 import Registerform from './pages/RegisterForm'
-import ResetPassword from './components/ResetPassword';
 import AttendanceForm from "./pages/AttendanceForm"; 
-import QRCodeGenerator from './components/QRCodeGenerator';
-
 
 export default function App() {
   return (
@@ -21,11 +18,7 @@ export default function App() {
         <Route path="/RegisterForm" element={<Registerform />} /> 
         <Route path="/Login" element={<Login />} /> 
         <Route path="/attendance-form/:courseId" element={<AttendanceForm />} />
-        <Route path="/reset-password" element={<ResetPassword />} />
-        <Route path="/register-attendance" element={<QRCodeGenerator />} />  
       </Routes>
-      
     </Router>
-    
   );
 }

@@ -6,14 +6,13 @@ const LoginForm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-  //const [forgotPasswordMessage, setForgotPasswordMessage] = useState(''); // Mensaje de éxito al enviar correo
   const navigate = useNavigate(); // Usamos useNavigate en lugar de useHistory
 
   const handleLogin = async (e) => {
     e.preventDefault();
 
     try {
-      const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/login`, { email, password });
+      const response = await axios.post('http://localhost:3000/api/login', { email, password });
 
       // Verificar que la respuesta contenga la información del usuario
       if (response.data.user) {
@@ -27,7 +26,7 @@ const LoginForm = () => {
 
         if (userRole === 'estudiante') {
           navigate('/dashboard'); // Redirigir al Dashboard del estudiante
-          console.log('Entró como estudiante:', userRole);
+          console.log('Entrio como estudiante:', userRole);
         } else if (userRole === 'profesor') {
           navigate('/dashboard-teacher'); // Redirigir al Dashboard del profesor
         } else {
@@ -42,10 +41,6 @@ const LoginForm = () => {
       setErrorMessage('Error al iniciar sesión: ' + error.message);
       console.error('Error al iniciar sesión:', error.message);
     }
-  };
-
-  const handleForgotPassword = () => {
-    navigate('/reset-password');  // Redirige a la página de restablecimiento de contraseña
   };
 
   return (
@@ -89,16 +84,6 @@ const LoginForm = () => {
             Ingresar
           </button>
         </form>
-
-        {/* Enlace de "Olvidé mi contraseña" */}
-        <div className="mt-4 text-center">
-          <button
-            onClick={handleForgotPassword}
-            className="text-sm text-[#114187] hover:underline"
-          >
-            ¿Olvidaste tu contraseña?
-          </button>
-        </div>
       </div>
     </div>
   );

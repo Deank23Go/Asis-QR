@@ -1,33 +1,23 @@
 import axios from "axios";
 
-// 1. Detección INFALIBLE de entorno
-const getBaseUrl = () => {
-  if (import.meta.env.VITE_BACKEND_URL) {
-    return import.meta.env.VITE_BACKEND_URL;
-  }
-  return import.meta.env.PROD 
-    ? "https://asis-qr.onrender.com" 
-    : "http://localhost:3000";
-};
+// Configuración automática de entornos
+const baseURL = import.meta.env.VITE_BACKEND_URL || 
+  (import.meta.env.DEV ? "http://localhost:3000" : "https://asis-qr.onrender.com");
 
-// 2. Instancia de Axios con protección contra errores
+// Instancia optimizada
 const instance = axios.create({
-  baseURL: getBaseUrl(),
+  baseURL,
   withCredentials: true,
   headers: {
     "Content-Type": "application/json",
     "Accept": "application/json"
   },
-  timeout: 15000
+  timeout: 10000
 });
 
-// 3. Interceptor para depuración MEJORADO
+// Interceptor para debug (opcional)
 instance.interceptors.request.use(config => {
-  const fullUrl = `${config.baseURL}${config.url}`;
-  console.log(`🚀 Petición a: ${fullUrl}`);
-  if (fullUrl.includes('localhost') && import.meta.env.PROD) {
-    console.error('⚠️ ERROR: Se está usando localhost en producción!');
-  }
+  console.log(`🌐 Enviando a: ${config.baseURL}${config.url}`);
   return config;
 });
 

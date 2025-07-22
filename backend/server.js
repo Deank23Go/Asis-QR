@@ -22,12 +22,20 @@ const app = express();
 
 // Configuración dinámica CORS
 const corsOptions = {
-  origin: [
-    'https://asis-qr-1.onrender.com', // URL exacta de tu frontend
-    'http://localhost:5173' // Solo desarrollo
-  ],
+  origin: (origin, callback) => {
+    const allowedOrigins = [
+      'https://asis-qr-1.onrender.com', // Producción
+      'http://localhost:5173' // Desarrollo
+    ];
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Origen no permitido por CORS'));
+    }
+  },
   credentials: true,
-  exposedHeaders: ['set-cookie']
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 };
 
 app.use(cors(corsOptions));
@@ -59,16 +67,21 @@ app.get("/test-db", async (req, res) => {
 app.use(express.json()); // Middleware para parsear solicitudes JSON
 console.log("Frontend URL:", process.env.FRONTEND_URL);
 // Configuración de express-session para manejar sesiones
-app.use(session({
-  secret: process.env.SESSION_SECRET,
-  cookie: {
-    secure: true, // Solo HTTPS
-    sameSite: 'none',
-    domain: '.render.com', // Dominio compartido
-    maxAge: 86400000
-  },
-  proxy: true // Requerido para Render
-}));
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET || "mi_clave_secreta_backup",
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      domain: '.render.com', // Punto inicial importante
+      secure: process.env.NODE_ENV === "production",
+      httpOnly: true,
+      sameSite: "none",
+      maxAge: 24 * 60 * 60 * 1000, // 24 horas
+    },
+    proxy: true, // Habilitar proxy para manejar solicitudes desde el frontend
+  })
+);
 
 // Configuración del Pool (como ya la tienes)
 const poolConfig = DATABASE_URL

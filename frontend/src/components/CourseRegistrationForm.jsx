@@ -12,7 +12,7 @@ const CourseRegistrationForm = ({ onBack }) => {
 
     try {
       const teacherId = 1; // Suponiendo que el docente está logueado y tiene este ID
-      const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/register-course`, {
+      const response = await axios.post('http://localhost:3000/api/register-course', {
         courseName,
         courseDescription,
         courseSchedule,
