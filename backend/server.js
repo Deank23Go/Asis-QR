@@ -68,22 +68,20 @@ app.use(express.json()); // Middleware para parsear solicitudes JSON
 
 console.log("Frontend URL:", process.env.FRONTEND_URL);
 
+
 // Configuración de express-session para manejar sesiones
-app.use(
-  session({
-    secret: process.env.SESSION_SECRET || "mi_clave_secreta_backup",
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-      domain: '.render.com', // Punto inicial importante
-      secure: process.env.NODE_ENV === "production",
-      httpOnly: true,
-      sameSite: "none",
-      maxAge: 24 * 60 * 60 * 1000, // 24 horas
-    },
-    proxy: true, // Habilitar proxy para manejar solicitudes desde el frontend
-  })
-);
+// Configuración de sesión
+app.use(session({
+  secret: 'tu-secreto-seguro',
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    httpOnly: true,
+    secure: false, // Cambiar a true en producción con HTTPS
+    sameSite: 'lax',
+    maxAge: 24 * 60 * 60 * 1000 // 24 horas
+  }
+}));
 
 // Configuración del Pool (como ya la tienes)
 const poolConfig = DATABASE_URL
