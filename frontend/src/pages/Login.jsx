@@ -40,8 +40,14 @@ const LoginForm = () => {
     } catch (error) {
       setErrorMessage('Error al iniciar sesión: ' + error.message);
       console.error('Error al iniciar sesión:', error.message);
+      if (error.response && error.response.status === 401) {
+      // Redirigir al login si la sesión ha expirado
+      navigate('/login?sessionExpired=true');
     }
-  };
+    console.error("Error al obtener los datos del estudiante:", error);
+  }
+};
+
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 py-6 px-4 sm:px-6 lg:px-8">
