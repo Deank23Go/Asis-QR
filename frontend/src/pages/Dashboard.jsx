@@ -24,10 +24,10 @@ const DashboardStudent = () => {
     const fetchUserData = async () => {
       try {
         
-        const response = await axios.get(
-          `${import.meta.env.VITE_BACKEND_URL}/api/user`,
-          { withCredentials: true } // Asegúrate de enviar las cookies con la solicitud
-        );
+        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/user`, {
+  withCredentials: true,  // Asegúrate de enviar las cookies con la solicitud
+});
+
 
         const imagePath = response.data.imagen
           ? `${import.meta.env.VITE_BACKEND_URL}/${response.data.imagen}`
@@ -59,7 +59,9 @@ const DashboardStudent = () => {
   // Función para cerrar sesión
   const handleLogout = async () => {
     try {
-      await axios.post("http://localhost:3000/api/logout"); // Solicitud al backend para cerrar sesión
+      await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/logout`, {}, { withCredentials: true });
+      console.log("Sesión cerrada exitosamente");
+
       localStorage.removeItem("user"); // Elimina el usuario de localStorage
 
       // Redirigir al login después de cerrar sesión
@@ -75,7 +77,7 @@ const DashboardStudent = () => {
       <header className="bg-[#2D4F77] text-white p-2 flex justify-center items-center">
         <div className="flex justify-center items-center w-full">
           <img
-            src="http://localhost:3000/uploads/logo.png"
+            src={`${import.meta.env.VITE_BACKEND_URL}/uploads/logo.png`}
             alt="Logo"
             className="rounded-[20px] max-w-[150px] sm:max-w-[900px] max-w-full h-auto object-contain transition-all duration-300 ease-in-out "
           />
@@ -88,7 +90,7 @@ const DashboardStudent = () => {
           {/* Información del Estudiante */}
           <div className="w-full sm:w-1/3 lg:w-1/4 bg-[#2D4F77] text-white p-6 rounded-lg shadow-md flex flex-col items-center justify-center mb-6 sm:mb-0">
             <img
-              src={profileImage || "http://localhost:3000/uploads/user.png"}
+              src={profileImage || `${import.meta.env.VITE_BACKEND_URL}/uploads/user.png`}  // Usar VITE_BACKEND_URL para imágenes
               alt="Perfil"
               className="w-32 h-32 rounded-full border-4 border-[#E1E8ED] mb-4"
             />

@@ -69,19 +69,19 @@ app.use(express.json()); // Middleware para parsear solicitudes JSON
 console.log("Frontend URL:", process.env.FRONTEND_URL);
 
 
-// Configuración de express-session para manejar sesiones
 // Configuración de sesión
 app.use(session({
   secret: 'tu-secreto-seguro',
   resave: false,
   saveUninitialized: false,
   cookie: {
-    httpOnly: true,
-    secure: false, // Cambiar a true en producción con HTTPS
-    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax', // Cambiar a 'none' en producción con HTTPS
+    httpOnly: true, // Solo accesible por el servidor, no puede ser manipulada por JavaScript
+    secure: process.env.NODE_ENV === 'production',  // En producción debe ser true (requiere HTTPS)
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',  // En producción, sameSite debe ser 'none'
     maxAge: 24 * 60 * 60 * 1000 // 24 horas
   }
 }));
+
 
 // Configuración del Pool (como ya la tienes)
 const poolConfig = DATABASE_URL
@@ -248,6 +248,7 @@ app.post("/api/login", async (req, res) => {
 
 app.get("/api/user", async (req, res) => {
   const { uid } = req.session; // Obtener el UID de la sesión
+   console.log('UID de la sesión:', uid);
 
   if (!uid) {
     return res.status(401).json({ error: "No autenticado" });
