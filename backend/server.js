@@ -24,7 +24,7 @@ const app = express();
 const corsOptions = {
   origin: (origin, callback) => {
     const allowedOrigins = [
-      'https://asis-qr-1.onrender.com', // Producción
+      'https://asisqr.netlify.app', // Producción
       'http://localhost:5173' // Desarrollo
     ];
     if (!origin || allowedOrigins.includes(origin)) {
@@ -75,8 +75,8 @@ app.use(session({
   saveUninitialized: false,
   cookie: {
     httpOnly: true, 
-    secure: process.env.NODE_ENV === 'production',  // En producción, secure debe ser true
-    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+    secure: process.env.NODE_ENV === 'production',  // Debe ser true en producción
+    sameSite: 'none',  // Necesario para cookies en producción entre diferentes dominios
     maxAge: 24 * 60 * 60 * 1000  // 24 horas
   }
 }));
