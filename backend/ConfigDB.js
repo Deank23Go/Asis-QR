@@ -1,10 +1,20 @@
-export const FRONTEND_URL = process.env.FRONTEND_URL || 'https://asis-qr.onrender.com';  // URL del backend, por defecto localhost:5173
+require('dotenv').config(); // Añade esto si usas .env localmente
 
+// ConfigDB.js
+module.exports = {
+  // Neon.tech (producción)
+  DATABASE_URL: process.env.DATABASE_URL || null,
 
-export const DB_USER = process.env.DB_USER || 'postgres';
-export const DB_HOST = process.env.DB_HOST || 'localhost';
-export const DB_NAME = process.env.DB_NAME || 'Asis_QR';
-export const DB_PASSWORD = process.env.DB_PASSWORD || 'admin';
-export const DB_PORT = process.env.DB_PORT || 5432;
+  // Configuración local (solo desarrollo)
+  DB_USER: process.env.DB_USER || 'postgres',
+  DB_HOST: process.env.DB_HOST || 'localhost',
+  DB_NAME: process.env.DB_NAME || 'Asis_QR',
+  DB_PASSWORD: process.env.DB_PASSWORD || 'admin',
+  DB_PORT: process.env.DB_PORT || 5432,
 
-export const PORT = process.env.PORT || 3000;  // Puerto del backend, por defecto 3000
+  // Otros
+  FRONTEND_URL: process.env.FRONTEND_URL || 'http://localhost:5173',
+  PORT: process.env.PORT || 3000
+};
+// Configuración de la base de datos y otros parámetros
+// Asegúrate de que las variables de entorno estén definidas en tu archivo .env

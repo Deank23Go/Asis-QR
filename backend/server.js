@@ -6,14 +6,15 @@ const crypto = require('crypto');
 const multer = require('multer');
 const path = require('path');
 const session = require('express-session');  // Importar express-session
-const { FRONTEND_URL, DB_HOST, DB_NAME, DB_PASSWORD, DB_PORT, DB_USER, PORT } = require('./ConfigDB');
+const { DB_USER, DB_HOST, DB_NAME, DB_PASSWORD, DB_PORT, DATABASE_URL, PORT, FRONTEND_URL } = require('./ConfigDB');
+
 
 const app = express();
 
 // 1. Configuración CORS (como ya la tienes)
 const corsOptions = {
   origin: [
-    process.env.FRONTEND_URL, 
+    FRONTEND_URL, // Usa la variable importada
     'http://localhost:5173',
     'https://asis-gp-1.onrender.com'
   ],
@@ -24,6 +25,7 @@ const corsOptions = {
 
 // Configuración CORS normal
 app.use(cors(corsOptions));
+
 
 // Middleware para manejar OPTIONS
 app.use((req, res, next) => {
@@ -37,29 +39,70 @@ app.use((req, res, next) => {
   next();
 });
 
+app.get('/test-db', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT NOW()');
+    res.json({ success: true, time: result.rows[0].now });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 app.use(express.json());  // Middleware para parsear solicitudes JSON
 console.log('Frontend URL:', process.env.FRONTEND_URL);
 // Configuración de express-session para manejar sesiones
 app.use(
   session({
-    secret: 'mi_clave_secreta',  // Cambia esto por una clave secreta única
+    secret: process.env.SESSION_SECRET || 'mi_clave_secreta_backup',
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
     cookie: {
-      secure: false,  // Cambia a true si usas HTTPS
-      httpOnly: true, // Previene el acceso a las cookies desde JS
-    },
+      secure: process.env.NODE_ENV === 'production',
+      httpOnly: true,
+      sameSite: 'lax',
+      maxAge: 24 * 60 * 60 * 1000 // 24 horas
+    }
   })
-)
+);
 
-// Conexión a la base de datos PostgreSQL
+// Configuración del Pool (como ya la tienes)
+const poolConfig = DATABASE_URL 
+  ? {
+      connectionString: DATABASE_URL,
+      ssl: {
+        rejectUnauthorized: false // Requerido para Neon.tech
+      }
+    }
+  : {
+      user: DB_USER,
+      host: DB_HOST,
+      database: DB_NAME,
+      password: DB_PASSWORD,
+      port: DB_PORT
+    };
+
 const pool = new Pool({
-  user: DB_USER,
-  host: DB_HOST,
-  database: DB_NAME,
-  password: DB_PASSWORD,
-  port: DB_PORT,
+  ...poolConfig,
+  // Opciones comunes:
+  max: 20,
+  idleTimeoutMillis: 30000,
+  connectionTimeoutMillis: 5000
 });
+
+
+// Verificación de conexión
+pool.connect()
+  .then(client => {
+    console.log(`✅ Conectado a ${DATABASE_URL ? 'Neon.tech (Producción)' : 'PostgreSQL Local (Desarrollo)'}`);
+    client.release();
+  })
+  .catch(err => {
+    console.error('❌ Error de conexión:', err.message);
+    process.exit(1);
+  });
+
+
+module.exports = { app, pool };
 
 // Configuración de Multer para manejar la subida de imágenes
 const storage = multer.diskStorage({
@@ -180,14 +223,6 @@ app.post('/api/logout', (req, res) => {
     }
     res.status(200).json({ message: 'Sesión cerrada correctamente' });
   });
-});
-
-
-
-// Configurar el puerto de la aplicación
-
-app.listen(PORT, () => {
-  console.log(`Servidor corriendo en el puerto ${PORT}`);
 });
 
 // Ruta para registrar un curso
@@ -409,4 +444,12 @@ app.get('/api/attendance-history', async (req, res) => {
     console.error('Error al obtener el historial de asistencias:', error);
     res.status(500).json({ error: 'Error al obtener el historial de asistencias' });
   }
+});
+
+
+// Iniciar servidor (esto debe estar al final del archivo)
+app.listen(PORT, () => {
+  console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
+  console.log(`🔗 Frontend configurado: ${FRONTEND_URL}`);
+  console.log(`🛢️ Base de datos: ${DATABASE_URL ? 'Neon.tech' : 'Local'}`);
 });
