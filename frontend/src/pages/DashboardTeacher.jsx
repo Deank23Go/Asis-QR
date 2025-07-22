@@ -25,10 +25,10 @@ const DashboardTeacher = () => {
   useEffect(() => {
     const fetchTeacherData = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/api/user");
+        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/user`);
         const imagePath = response.data.imagen
-          ? `http://localhost:3000/${response.data.imagen}`
-          : "http://localhost:3000/uploads/user.png";
+          ? `${import.meta.env.VITE_BACKEND_URL}/${response.data.imagen}`
+          : `${import.meta.env.VITE_BACKEND_URL}/uploads/user.png`;
         setTeacherName(response.data.nombre || "Profesor/a");
         setProfileImage(imagePath);
         setEmail(response.data.email);
@@ -94,7 +94,7 @@ const DashboardTeacher = () => {
             <img
               src={
                 profileImage ||
-                "http://localhost:3000/uploads/user.png"
+                `${import.meta.env.VITE_BACKEND_URL}/uploads/user.png`
               }
               alt="Perfil"
               className="w-32 h-32 rounded-full border-4 border-[#E1E8ED] mb-4"

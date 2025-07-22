@@ -57,7 +57,7 @@ const RegisterForm = () => {
       formData.append('password', userData.password);
 
       // Enviar la solicitud POST a la API de backend
-      const response = await axios.post('http://localhost:3000/api/register', formData, {
+      const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/register`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',  // Asegúrate de que el tipo de contenido sea correcto
         },

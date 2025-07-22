@@ -22,7 +22,7 @@ const Register = () => {
       const user = userCredential.user;
 
       // 2. Guardar datos adicionales en Django
-      await axios.post('http://localhost:3000/api/usuarios/', {
+      await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/usuarios/`, {
         uid: user.uid,
         email: user.email,
         nombre,
