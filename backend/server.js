@@ -89,7 +89,6 @@ const pool = new Pool({
   connectionTimeoutMillis: 5000
 });
 
-
 // Verificación de conexión
 pool.connect()
   .then(client => {
