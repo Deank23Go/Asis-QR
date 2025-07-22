@@ -77,8 +77,8 @@ app.use(session({
   saveUninitialized: false,
   cookie: {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production', // Cambiar a true en producción con HTTPS
-    sameSite: 'lax',
+    secure: false, // Cambiar a true en producción con HTTPS
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax', // Cambiar a 'none' en producción con HTTPS
     maxAge: 24 * 60 * 60 * 1000 // 24 horas
   }
 }));

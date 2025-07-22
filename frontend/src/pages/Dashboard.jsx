@@ -23,15 +23,12 @@ const DashboardStudent = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const token = localStorage.getItem('token');
+        
         const response = await axios.get(
           `${import.meta.env.VITE_BACKEND_URL}/api/user`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`
-            }
-          }
+          { withCredentials: true } // Asegúrate de enviar las cookies con la solicitud
         );
+
         const imagePath = response.data.imagen
           ? `${import.meta.env.VITE_BACKEND_URL}/${response.data.imagen}`
           : `${import.meta.env.VITE_BACKEND_URL}/uploads/user.png`;
