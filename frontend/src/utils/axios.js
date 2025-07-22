@@ -12,7 +12,7 @@ const getCorrectBaseURL = () => {
   
   return window.location.hostname === 'localhost' 
     ? 'http://localhost:3000'
-    : 'https://asis-qr-1.onrender.com';
+    : 'https://asis-qr.onrender.com';
 };
 
 const instance = axios.create({
