@@ -22,12 +22,12 @@ const app = express();
 
 // Configuración dinámica CORS
 app.use(cors({
-  origin: 'https://asis-gr-l.onrender.com',
+  origin: 'https://asis-qr-1.onrender.com',
   credentials: true, // Si usas cookies/tokens
 }));
 
 const allowedOrigins = [
-  'https://asis-gr-l.onrender.com',
+  'https://asis-qr-1.onrender.com',
   'http://localhost:5173', // Para desarrollo local con Vite
 ];
 
