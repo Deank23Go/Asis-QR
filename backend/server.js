@@ -134,6 +134,15 @@ app.get('/api/status', (req, res) => {
 
 module.exports = { app, pool };
 
+// Configuración para servir archivos estáticos
+app.use(express.static(path.join(__dirname, 'client/build')));
+
+// API routes
+app.get('/api/dashboard', (req, res) => {
+  res.json({ data: 'Información del dashboard' });
+});
+
+
 // Configuración de Multer para manejar la subida de imágenes
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
