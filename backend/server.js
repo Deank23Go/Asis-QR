@@ -22,9 +22,22 @@ const app = express();
 // 1. Configuración CORS (como ya la tienes)
 // Configuración dinámica CORS
 const corsOptions = {
-  origin: FRONTEND_URL, // Usará la variable de entorno
-  credentials: true
+  origin: (origin, callback) => {
+    const allowedOrigins = [
+      'https://asis-qr-1.onrender.com', // Producción
+      'http://localhost:5173' // Desarrollo
+    ];
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Origen no permitido por CORS'));
+    }
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 };
+
 app.use(cors(corsOptions));
 
 // Middleware para manejar OPTIONS
