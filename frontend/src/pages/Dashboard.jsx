@@ -77,7 +77,7 @@ const DashboardStudent = () => {
       <header className="bg-[#2D4F77] text-white p-2 flex justify-center items-center">
         <div className="flex justify-center items-center w-full">
           <img
-            src={`${import.meta.env.VITE_BACKEND_URL}/uploads/logo.png`}
+            src='/src/assets/Logo.png' // Ajusta la ruta
             alt="Logo"
             className="rounded-[20px] max-w-[150px] sm:max-w-[900px] max-w-full h-auto object-contain transition-all duration-300 ease-in-out "
           />

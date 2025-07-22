@@ -24,7 +24,7 @@ const app = express();
 const corsOptions = {
   origin: (origin, callback) => {
     const allowedOrigins = [
-      'https://asisqr.netlify.app', // Producción
+      'https://asis-qr-1.onrender.com', // Producción
       'http://localhost:5173' // Desarrollo
     ];
     if (!origin || allowedOrigins.includes(origin)) {
