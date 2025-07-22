@@ -18,20 +18,13 @@ const {
 } = require("./ConfigDB");
 
 const app = express();
-
-
-// Configuración dinámica CORS
-app.use(cors({
-  origin: 'https://asis-qr-1.onrender.com',
-  credentials: true, // Si usas cookies/tokens
-}));
-
+// Configuración CORS ÚNICA y precisa
 const allowedOrigins = [
-  'https://asis-qr-1.onrender.com',
-  'http://localhost:5173', // Para desarrollo local con Vite
+  'https://asis-qr-1.onrender.com', // Asegúrate de que coincida con tu frontend
+  'http://localhost:5173', // Solo para desarrollo
 ];
 
-app.use(cors({
+const corsOptions = {
   origin: function (origin, callback) {
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
@@ -39,16 +32,12 @@ app.use(cors({
       callback(new Error('Origen no permitido por CORS'));
     }
   },
-  credentials: true,
-}));
-const corsOptions = {
-  origin: allowedOrigins,
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-  credentials: true, // Permitir cookies y credenciales
-  optionsSuccessStatus: 204, // Para compatibilidad con navegadores antiguos
+  credentials: true, // Permite cookies/tokens
+  allowedHeaders: ['Content-Type', 'Authorization'], // Headers permitidos
 };
-// Aplicar CORS a todas las rutas
-app.use(cors(corsOptions));
+
+app.use(cors(corsOptions)); // ¡Solo esta línea!
 
 // Middleware para manejar OPTIONS
 app.use((req, res, next) => {
