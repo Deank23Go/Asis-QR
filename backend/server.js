@@ -21,12 +21,18 @@ const app = express();
 
 
 // Configuración dinámica CORS
-const corsOptions = {
-  origin: (origin, callback) => {
-    const allowedOrigins = [
-      'https://asis-qr-1.onrender.com', // Producción
-      'http://localhost:5173' // Desarrollo
-    ];
+app.use(cors({
+  origin: 'https://asis-gr-l.onrender.com',
+  credentials: true, // Si usas cookies/tokens
+}));
+
+const allowedOrigins = [
+  'https://asis-gr-l.onrender.com',
+  'http://localhost:5173', // Para desarrollo local con Vite
+];
+
+app.use(cors({
+  origin: function (origin, callback) {
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
@@ -34,10 +40,14 @@ const corsOptions = {
     }
   },
   credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+}));
+const corsOptions = {
+  origin: allowedOrigins,
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  credentials: true, // Permitir cookies y credenciales
+  optionsSuccessStatus: 204, // Para compatibilidad con navegadores antiguos
 };
-
+// Aplicar CORS a todas las rutas
 app.use(cors(corsOptions));
 
 // Middleware para manejar OPTIONS
