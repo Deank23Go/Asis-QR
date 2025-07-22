@@ -70,13 +70,13 @@ console.log("Frontend URL:", process.env.FRONTEND_URL);
 
 
 app.use(session({
-  secret: 'tu-secreto-seguro',
+  secret: process.env.SECRET_KEY || 'default_secret_key', // Clave secreta para firmar la sesión
   resave: false,
   saveUninitialized: false,
   cookie: {
     httpOnly: true, 
     secure: process.env.NODE_ENV === 'production',  // Debe ser true en producción
-    sameSite: 'none',  // Necesario para cookies en producción entre diferentes dominios
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',  // Necesario para cookies en producción entre diferentes dominios
     maxAge: 24 * 60 * 60 * 1000  // 24 horas
   }
 }));
