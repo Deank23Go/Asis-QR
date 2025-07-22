@@ -20,18 +20,11 @@ const {
 const app = express();
 
 // 1. Configuración CORS (como ya la tienes)
+// Configuración dinámica CORS
 const corsOptions = {
-  origin: [
-    FRONTEND_URL, // Usa la variable importada
-    "http://localhost:5173",
-    "https://asis-gp-1.onrender.com",
-  ],
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"],
-  credentials: true,
+  origin: FRONTEND_URL, // Usará la variable de entorno
+  credentials: true
 };
-
-// Configuración CORS normal
 app.use(cors(corsOptions));
 
 // Middleware para manejar OPTIONS
@@ -116,6 +109,15 @@ pool
     console.error("❌ Error de conexión:", err.message);
     process.exit(1);
   });
+
+  // Ruta de prueba
+app.get('/api/status', (req, res) => {
+  res.json({ 
+    status: 'online',
+    db: DATABASE_URL ? 'Neon.tech' : 'Local',
+    frontend: FRONTEND_URL
+  });
+});
 
 module.exports = { app, pool };
 
@@ -509,9 +511,10 @@ app.get("/api/attendance-history", async (req, res) => {
   }
 });
 
-// Iniciar servidor (esto debe estar al final del archivo)
+// Iniciar servidor
 app.listen(PORT, () => {
-  console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
-  console.log(`🔗 Frontend configurado: ${FRONTEND_URL}`);
-  console.log(`🛢️ Base de datos: ${DATABASE_URL ? "Neon.tech" : "Local"}`);
+  console.log(`\n=== SERVIDOR ACTIVO ===`);
+  console.log(`🔗 Frontend: ${FRONTEND_URL}`);
+  console.log(`🛢️  Base de datos: ${DATABASE_URL ? 'Neon.tech' : 'Local'}`);
+  console.log(`🚀 Servidor: http://localhost:${PORT}\n`);
 });
